@@ -4,6 +4,8 @@ This folder is a writing package for developing a paper, technical report, prepr
 
 It is designed for a coauthor who did not participate in the earlier project discussion. It contains problem definitions, terminology, taxonomy, method description, dataset design, annotation guidance, experiment planning, metrics, related-work search directions, outline, introduction drafts, and writing constraints.
 
+Before drafting the paper, review `evidence-pack/` first. The paper should not make claims stronger than the available evidence.
+
 ## Recommended use
 
 1. Read `writing-brief-for-coauthor.md` first.

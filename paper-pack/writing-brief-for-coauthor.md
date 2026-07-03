@@ -1,5 +1,7 @@
 # Writing Brief for Coauthor
 
+Before drafting the paper, review `evidence-pack/` first. The paper should not make claims stronger than the available evidence.
+
 ## What this paper should solve
 
 The paper should define and analyze a class of LLM communication failures caused by wrong boundary binding:
