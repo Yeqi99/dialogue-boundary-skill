@@ -2,20 +2,20 @@
 
 ## Scenario
 
-An upstream goal is to create Dialogue Boundary Skill: a reusable skill that prevents models from mixing recipient-visible text with internal context when generating text for different audiences.
+The upstream goal is to create LLM Communication Boundary Skill: a reusable skill that prevents evaluation frame misbinding and dialogue boundary failures before models answer or generate text.
 
 ## Bad example
 
 ```text
-Create a guide of AI politeness reply techniques that helps models sound natural, friendly, and less robotic in everyday messages.
+Create a collection of AI politeness reply techniques that helps models sound natural, friendly, and less robotic in everyday messages.
 ```
 
 ## Problem
 
-The original concept has drifted into generic tone optimization. It loses the core structure: `speaker`, `recipient`, `output_type`, `visible_context`, `internal_context`, `forbidden_context`, `clean_output`, and `leakage_review`.
+The original concept has been compressed into generic tone optimization. It loses Frame Lock, speaker, recipient, visible context, internal context, forbidden context, leakage review, and instruction drift review.
 
 ## Good example
 
 ```text
-Create Dialogue Boundary Skill as a lightweight reusable skill for locking the speaker, recipient, output type, visible context, internal context, and forbidden context before generating final text. The skill must include a leakage review that checks for exposed meta-communication, prompt traces, self-correction, upstream negotiation, and instruction drift.
+Preserve the core definition: before answering, bind the evaluation frame; before generating downstream text, bind the speaker, recipient, output type, visible context, internal context, and forbidden context; before delivery, check for meta-communication leakage, prompt traces, self-correction leakage, agent task pollution, and instruction drift.
 ```

@@ -1,18 +1,19 @@
 ---
-name: dialogue-boundary-skill
-description: Prevent dialogue boundary failures in LLM-generated communication. Use when writing, rewriting, transforming, summarizing, delegating, or publishing text for a specific recipient, including user replies, third-party messages, customer replies, public-facing text, tool instructions, Codex/Cursor/Claude Code/downstream agent tasks, reusable prompts, policies, skills, and instructions, especially after tone, wording, audience, or role corrections.
+name: llm-communication-boundary-skill
+description: Prevent evaluation frame misbinding and dialogue boundary failures in LLM-generated communication. Use when Codex or another agent must answer whether something is meaningful, worth doing, useful, good, bad, or valuable; write or rewrite text for a specific recipient; create third-party messages, customer replies, public-facing text, tool instructions, downstream agent tasks, reusable prompts, policies, skills, or instructions; or respond after the user corrected tone, wording, audience, goal, or evaluation standard.
 ---
 
-# Dialogue Boundary Skill
+# LLM Communication Boundary Skill
 
 ## Purpose
 
-Prevent audience confusion, role voice contamination, meta-communication leakage, prompt trace leakage, and agent task pollution when generating text for humans, third parties, tools, or downstream agents.
+Prevent evaluation frame misbinding, audience confusion, role voice contamination, meta-communication leakage, prompt trace leakage, and agent task pollution in LLM-generated communication.
 
 ## When to use
 
 Use this skill whenever the model is asked to:
 
+- answer whether something is meaningful, worth doing, good, bad, useful, or valuable
 - write a message for someone else
 - rewrite text for a specific recipient
 - generate a task for Codex, Cursor, Claude Code, or another agent
@@ -21,30 +22,84 @@ Use this skill whenever the model is asked to:
 - prepare third-party-facing text
 - produce tool instructions
 - summarize something for a specific audience
-- respond after the user corrected tone, wording, audience, or role
+- respond after the user corrected tone, wording, audience, goal, or evaluation standard
 - create a reusable prompt, skill, policy, or instruction for another model
 
 ## Core rule
 
+Before answering or generating final text, determine whether the task needs:
+
+- `Frame Lock` for evaluative answers
+- `Dialogue Boundary Lock` for recipient-facing text
+- both gates when an answer evaluates an idea and also produces downstream text
+
+Do not let hidden assumptions about academic rigor, politeness, audience, tool behavior, or agent delegation silently decide the output.
+
+## Gate 1: Frame Lock
+
+Before answering evaluative questions, determine:
+
+- `user_goal`
+- `evaluator`
+- `success_standard`
+- `cost_model`
+- `expected_output_type`
+- `low_cost_path`
+- `rigorous_path`
+- `likely_wrong_default_frame`
+
+Avoid defaulting to the strictest expert standard unless the user clearly asks for it.
+
+Example:
+
+Question:
+
+```text
+Is it meaningful to turn this idea into a paper?
+```
+
+Bad frame:
+
+```text
+Only evaluate whether it can become a top conference paper.
+```
+
+Better frame:
+
+- meaningful as an open-source research artifact
+- meaningful as a technical report or preprint
+- meaningful as a workshop or short paper
+- additional work needed for high-level publication
+
+## Gate 2: Dialogue Boundary Lock
+
 Before generating final text, determine:
 
-1. Who is speaking?
-2. Who is receiving the text?
-3. What is the output type?
-4. What context is visible to the recipient?
-5. What context is internal only?
-6. What content would count as leakage?
-7. What intent must be preserved without exposing the upstream process?
+- `speaker`
+- `recipient`
+- `output_type`
+- `visible_context`
+- `internal_context`
+- `forbidden_context`
+- `tone`
+- `must_include`
+- `must_not_include`
+- `leakage_risks`
+
+Return the clean output for the intended recipient. Keep any explanation for the upstream user separate from downstream text.
 
 ## Boundary Card
 
 Define this structure:
 
 ```yaml
+user_goal:
+evaluator:
+success_standard:
+cost_model:
 speaker:
 recipient:
 output_type:
-goal:
 visible_context:
 internal_context:
 forbidden_context:
@@ -55,47 +110,52 @@ leakage_risks:
 instruction_drift_risks:
 ```
 
-Use the Boundary Card to reason before writing. Do not include the card in the final downstream output unless the user explicitly asks for it or the output contract is a diagnostic explanation to the user.
+Use the Boundary Card to reason before writing. Do not include the card in final downstream output unless the user explicitly asks for diagnostic output or the card itself is the deliverable.
 
 ## Process
 
-Step 1: Identify the recipient  
-Step 2: Lock the speaker  
-Step 3: Classify the output type  
-Step 4: Separate visible context from internal context  
-Step 5: Preserve intent without leaking process  
-Step 6: Remove meta-communication  
-Step 7: Generate clean output  
-Step 8: Run leakage review  
-Step 9: Run instruction drift review
+1. Identify whether this is an evaluative answer or generated text.
+2. If evaluative, run Frame Lock.
+3. Identify recipient.
+4. Lock speaker.
+5. Classify output type.
+6. Separate visible context from internal context.
+7. Preserve intent without leaking process.
+8. Remove meta-communication and prompt traces.
+9. Generate clean output.
+10. Run leakage review.
+11. Run instruction drift review.
 
 ## Leakage review
 
 Before returning final downstream text, check whether it includes:
 
-- a reference to the user's prompt, correction, or private intent
-- the model's own explanation of how it rewrote or adjusted the text
+- the user's private goal, correction, or negotiation with the model
+- a phrase that reveals the model's rewriting strategy
 - a tone instruction that belongs only to the user-model layer
-- a phrase that reveals a hidden persuasion or compliance strategy
+- a hidden persuasion strategy
 - an apology or self-correction intended for the upstream user
-- a prompt fragment, debug note, or instruction meant for another layer
-- content that addresses the wrong recipient
+- prompt fragments, debug notes, or instruction traces
+- explanations meant for a different audience
+- chatty commentary inside an agent task or tool instruction
 
 If any item appears, remove it and preserve only the recipient-visible intent.
 
 ## Instruction drift review
 
-When one model writes instructions, prompts, skills, policies, or tasks for another model, check whether the original idea has been distorted.
+When one model writes instructions, prompts, skills, policies, README content, paper material, or tasks for another model, check whether the original idea has been distorted.
 
 Bad distortions include:
 
-- Turning dialogue boundary into generic tone polishing
-- Turning recipient isolation into simple politeness rules
-- Turning agent task cleanup into general prompt engineering advice
-- Turning the project into an unrelated multi-agent protocol
-- Losing the core distinction between visible context and internal context
-- Losing the requirement that final text must not expose user-model negotiation
-- Adding unnecessary complexity that distracts from the single Skill
+- turning communication boundary into generic tone polishing
+- turning recipient isolation into simple politeness rules
+- turning agent task cleanup into general prompt engineering advice
+- turning the project into an unrelated multi-agent protocol
+- reducing the project to prompt leak prevention
+- framing the whole project only as a top-conference research problem
+- losing Frame Lock
+- losing Dialogue Boundary Lock
+- losing the distinction between visible context, internal context, and forbidden context
 
 ## Forbidden content
 
@@ -123,13 +183,17 @@ For `user_reply`:
 
 The model may explain decisions to the user, but must not mix that explanation into text intended for another recipient.
 
+For `evaluative_answer`:
+
+The model should identify the likely evaluation frame and avoid silently defaulting to the strictest or most common expert standard.
+
 For `third_party_text`:
 
 Return only the clean text the third party should see.
 
 For `agent_task`:
 
-Return only the task goal, context, constraints, inputs, outputs, and acceptance criteria. Remove chatty explanations, apologies, self-reflection, and upstream negotiation.
+Return only task goal, context, constraints, inputs, outputs, and acceptance criteria. Remove chatty explanation, apologies, self-reflection, and upstream negotiation.
 
 For `tool_instruction`:
 
@@ -141,6 +205,8 @@ Preserve the generalized problem, concepts, and procedure. Do not include accide
 
 ## Final response pattern
 
-When the user asks for downstream text, return the clean downstream text according to the output contract. Keep any explanation to the user separate from that downstream text.
+When the user asks for downstream text, return the clean downstream text according to the output contract.
 
-When the user asks for a diagnosis, explain the boundary issue directly and identify which fields of the Boundary Card were confused.
+When the user asks for an evaluative answer, state the evaluation frame and separate low-cost, medium-rigor, and high-rigor paths when relevant.
+
+When the user asks for a diagnosis, identify which boundary field or frame field was misbound.

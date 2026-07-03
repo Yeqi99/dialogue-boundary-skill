@@ -1,15 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "schema/boundary-card.schema.json",
-  "title": "Dialogue Boundary Card",
-  "description": "A compact structure for separating speaker, recipient, visible context, internal context, forbidden context, leakage risks, and instruction drift risks before generating final text.",
+  "title": "LLM Communication Boundary Card",
+  "description": "A compact structure for locking evaluation frames and dialogue boundaries before generating or delivering LLM output.",
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "user_goal",
+    "evaluator",
+    "success_standard",
+    "cost_model",
     "speaker",
     "recipient",
     "output_type",
-    "goal",
     "visible_context",
     "internal_context",
     "forbidden_context",
@@ -20,19 +23,34 @@
     "instruction_drift_risks"
   ],
   "properties": {
+    "user_goal": {
+      "type": "string",
+      "description": "The user's real goal or decision context for the answer."
+    },
+    "evaluator": {
+      "type": "string",
+      "description": "The person, audience, institution, or standard that evaluates whether the output is successful."
+    },
+    "success_standard": {
+      "type": "string",
+      "description": "The standard used to judge meaning, value, quality, or usefulness."
+    },
+    "cost_model": {
+      "type": "string",
+      "description": "The expected cost, rigor, time, evidence, and implementation burden assumed by the answer."
+    },
     "speaker": {
       "type": "string",
-      "minLength": 1,
       "description": "The voice or role that final text should use."
     },
     "recipient": {
       "type": "string",
-      "minLength": 1,
-      "description": "The person, audience, tool, or downstream agent that will receive the final text."
+      "description": "The person, audience, tool, or downstream agent that will receive the final output."
     },
     "output_type": {
       "type": "string",
       "enum": [
+        "evaluative_answer",
         "user_reply",
         "third_party_text",
         "customer_reply",
@@ -47,11 +65,6 @@
       ],
       "description": "The output contract that determines what may appear in the final text."
     },
-    "goal": {
-      "type": "string",
-      "minLength": 1,
-      "description": "The intended outcome of the final text."
-    },
     "visible_context": {
       "type": "array",
       "items": { "type": "string" },
@@ -60,7 +73,7 @@
     "internal_context": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Upstream instructions, negotiations, corrections, or reasoning that must stay internal."
+      "description": "Upstream instructions, private goals, corrections, negotiations, or reasoning that must stay internal."
     },
     "forbidden_context": {
       "type": "array",
@@ -79,13 +92,14 @@
     "must_not_include": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Points, phrases, or layers that must be excluded."
+      "description": "Points, phrases, standards, or layers that must be excluded."
     },
     "leakage_risks": {
       "type": "array",
       "items": {
         "type": "string",
         "enum": [
+          "evaluation_frame_misbinding",
           "audience_confusion",
           "role_voice_contamination",
           "meta_communication_leakage",
@@ -96,7 +110,7 @@
           "other"
         ]
       },
-      "description": "Boundary failure risks to check before returning final text."
+      "description": "Boundary failure risks to check before returning final output."
     },
     "instruction_drift_risks": {
       "type": "array",
@@ -104,16 +118,18 @@
         "type": "string",
         "enum": [
           "generic_tone_polishing",
-          "recipient_isolation_reduced_to_politeness",
-          "agent_task_cleanup_reduced_to_prompt_engineering",
+          "ordinary_politeness_rules",
+          "generic_prompt_engineering",
           "unrelated_multi_agent_protocol",
-          "visible_internal_context_distinction_lost",
-          "upstream_negotiation_leakage_allowed",
-          "unnecessary_complexity",
+          "prompt_leak_only_framing",
+          "top_conference_only_framing",
+          "frame_lock_lost",
+          "dialogue_boundary_lock_lost",
+          "visible_internal_forbidden_context_distinction_lost",
           "other"
         ]
       },
-      "description": "Risks that a generated instruction, skill, policy, or task has drifted from the original concept."
+      "description": "Risks that a generated instruction, skill, policy, paper section, or task has drifted from the original concept."
     }
   }
 }
