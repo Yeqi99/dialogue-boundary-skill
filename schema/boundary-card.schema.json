@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schema/boundary-card.schema.json",
+  "title": "Dialogue Boundary Card",
+  "description": "A compact structure for separating speaker, recipient, visible context, internal context, forbidden context, leakage risks, and instruction drift risks before generating final text.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "speaker",
+    "recipient",
+    "output_type",
+    "goal",
+    "visible_context",
+    "internal_context",
+    "forbidden_context",
+    "tone",
+    "must_include",
+    "must_not_include",
+    "leakage_risks",
+    "instruction_drift_risks"
+  ],
+  "properties": {
+    "speaker": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The voice or role that final text should use."
+    },
+    "recipient": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The person, audience, tool, or downstream agent that will receive the final text."
+    },
+    "output_type": {
+      "type": "string",
+      "enum": [
+        "user_reply",
+        "third_party_text",
+        "customer_reply",
+        "public_text",
+        "agent_task",
+        "tool_instruction",
+        "reusable_skill",
+        "policy",
+        "prompt",
+        "summary",
+        "other"
+      ],
+      "description": "The output contract that determines what may appear in the final text."
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The intended outcome of the final text."
+    },
+    "visible_context": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Facts and context the recipient is allowed to see."
+    },
+    "internal_context": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Upstream instructions, negotiations, corrections, or reasoning that must stay internal."
+    },
+    "forbidden_context": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Specific content that must not appear in the final output."
+    },
+    "tone": {
+      "type": "string",
+      "description": "The desired tone as it should appear to the recipient, without exposing upstream tone negotiation."
+    },
+    "must_include": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Recipient-visible points that must be included."
+    },
+    "must_not_include": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Points, phrases, or layers that must be excluded."
+    },
+    "leakage_risks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "audience_confusion",
+          "role_voice_contamination",
+          "meta_communication_leakage",
+          "prompt_trace_leakage",
+          "agent_task_pollution",
+          "self_correction_leakage",
+          "wrong_layer_instruction",
+          "other"
+        ]
+      },
+      "description": "Boundary failure risks to check before returning final text."
+    },
+    "instruction_drift_risks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "generic_tone_polishing",
+          "recipient_isolation_reduced_to_politeness",
+          "agent_task_cleanup_reduced_to_prompt_engineering",
+          "unrelated_multi_agent_protocol",
+          "visible_internal_context_distinction_lost",
+          "upstream_negotiation_leakage_allowed",
+          "unnecessary_complexity",
+          "other"
+        ]
+      },
+      "description": "Risks that a generated instruction, skill, policy, or task has drifted from the original concept."
+    }
+  }
+}
