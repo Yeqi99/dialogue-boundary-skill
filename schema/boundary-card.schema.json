@@ -39,6 +39,22 @@
       "type": "string",
       "description": "The expected cost, rigor, time, evidence, and implementation burden assumed by the answer."
     },
+    "expected_output_type": {
+      "type": "string",
+      "description": "The likely form of output the user needs, such as quick advice, technical report, open-source artifact, preprint, workshop paper, formal paper, agent task, or third-party text."
+    },
+    "low_cost_path": {
+      "type": "string",
+      "description": "A practical low-cost path that satisfies the user's likely goal without overfitting to an unnecessarily strict standard."
+    },
+    "rigorous_path": {
+      "type": "string",
+      "description": "A more rigorous path required if the user's goal is formal publication, high-level evaluation, or stronger external validation."
+    },
+    "likely_wrong_default_frame": {
+      "type": "string",
+      "description": "A default evaluation frame the model might incorrectly apply, such as assuming the user wants a top-conference paper when they only need a research-style artifact or technical report."
+    },
     "speaker": {
       "type": "string",
       "description": "The voice or role that final text should use."

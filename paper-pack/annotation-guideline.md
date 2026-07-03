@@ -53,4 +53,6 @@ Given a user input, intended output type, target recipient, bad output, and cand
 - `wrong_output_type`
 - `instruction_drift`
 
+The `instruction_drift` label is a secondary guardrail label, not one of the two primary communication boundary failure families.
+
 Use short notes to identify the exact field that failed, such as `recipient`, `speaker`, `success_standard`, `internal_context`, or `forbidden_context`.

@@ -29,7 +29,7 @@
 - Prompt Trace Leakage
 - Agent Task Pollution
 - Self-correction Leakage
-- Instruction Drift
+- Secondary guardrail: Instruction Drift Guard
 
 ## 5. Boundary Card Method
 
@@ -37,6 +37,7 @@
 - Explain Gate 1: Frame Lock.
 - Explain Gate 2: Dialogue Boundary Lock.
 - Explain post-generation leakage review and instruction drift review.
+- Keep Instruction Drift Guard as a secondary check, not a third primary communication boundary failure.
 
 ## 6. Dataset Design
 
@@ -56,7 +57,7 @@
 - Leakage rates
 - Agent Task Purity
 - Intent Preservation
-- Instruction Drift Rate
+- Secondary diagnostic metric: Instruction Drift Rate
 
 ## 9. Discussion
 

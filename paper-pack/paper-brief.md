@@ -25,7 +25,7 @@ The proposed method is a Boundary Card with two gates:
 
 ## Dataset
 
-Design a small annotated dataset named Communication Boundary Cases (CBC), containing paired bad and good outputs for frame misbinding, audience confusion, meta-communication leakage, prompt trace leakage, agent task pollution, self-correction leakage, and instruction drift.
+Design a small annotated dataset named Communication Boundary Cases (CBC), containing paired bad and good outputs for frame misbinding, audience confusion, meta-communication leakage, prompt trace leakage, agent task pollution, and self-correction leakage. It may include instruction drift as a secondary guardrail/check, not one of the two primary communication boundary failures.
 
 ## Experiment plan
 

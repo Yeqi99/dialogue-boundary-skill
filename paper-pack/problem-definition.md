@@ -40,6 +40,8 @@ Meta-communication Leakage occurs when the output reveals how the message was di
 
 Agent Task Pollution occurs when a downstream agent task includes chatty explanations, apologies, self-protective notes, or upstream correction traces instead of a clean task specification.
 
-## Instruction Drift
+## Instruction Drift Guard
+
+Instruction Drift Guard is a secondary guardrail/check, not one of the two primary communication boundary failures.
 
 Instruction Drift occurs when a model rewrites a skill, prompt, policy, or task in a way that distorts the original concept. In this project, drift often turns communication boundary control into generic tone polishing, politeness rules, prompt engineering, or top-conference-only research framing.

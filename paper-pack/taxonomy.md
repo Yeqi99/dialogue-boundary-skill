@@ -1,5 +1,12 @@
 # Taxonomy of Communication Boundary Failures
 
+This taxonomy has two primary failure families:
+
+1. Frame Boundary Failure / Evaluation Frame Misbinding
+2. Dialogue Boundary Failure
+
+Instruction Drift Guard is included as a secondary guardrail to prevent distortion when the skill itself is transferred, rewritten, or reused by another agent.
+
 ## 1. Evaluation Frame Misbinding
 
 Definition: The model evaluates a question under the wrong success standard or cost model.
@@ -98,7 +105,9 @@ Why it happens: The model treats correction history as visible context.
 
 Boundary Card mitigation: Put correction history in `internal_context`.
 
-## 8. Instruction Drift
+## 8. Instruction Drift Guard
+
+Instruction Drift Guard is a secondary guardrail/check, not one of the two primary communication boundary failures.
 
 Definition: A model rewrites the project, skill, prompt, or policy into a different concept.
 

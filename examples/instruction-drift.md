@@ -1,8 +1,10 @@
-# Instruction Drift Example
+# Instruction Drift Guard Example
 
 ## Scenario
 
 The upstream goal is to create LLM Communication Boundary Skill: a reusable skill that prevents evaluation frame misbinding and dialogue boundary failures before models answer or generate text.
+
+Instruction Drift Guard is a secondary guardrail/check, not one of the two primary communication boundary failures.
 
 ## Bad example
 

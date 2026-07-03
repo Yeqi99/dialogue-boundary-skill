@@ -30,6 +30,8 @@ Each case should contain:
 
 ## Failure types
 
+Primary failure families:
+
 - evaluation_frame_misbinding
 - audience_confusion
 - role_voice_contamination
@@ -37,7 +39,12 @@ Each case should contain:
 - prompt_trace_leakage
 - agent_task_pollution
 - self_correction_leakage
+
+Secondary guardrail cases:
+
 - instruction_drift
+
+The dataset may include a small subset of instruction drift cases as secondary guardrail cases. These cases test whether the concept is preserved when transformed into prompts, agent tasks, or reusable skills. They are not counted as one of the two primary failure families.
 
 ## Data construction
 

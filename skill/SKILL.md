@@ -97,6 +97,10 @@ user_goal:
 evaluator:
 success_standard:
 cost_model:
+expected_output_type:
+low_cost_path:
+rigorous_path:
+likely_wrong_default_frame:
 speaker:
 recipient:
 output_type:
@@ -142,6 +146,8 @@ Before returning final downstream text, check whether it includes:
 If any item appears, remove it and preserve only the recipient-visible intent.
 
 ## Instruction drift review
+
+Instruction Drift Guard is a secondary guardrail/check, not one of the two primary communication boundary failures.
 
 When one model writes instructions, prompts, skills, policies, README content, paper material, or tasks for another model, check whether the original idea has been distorted.
 

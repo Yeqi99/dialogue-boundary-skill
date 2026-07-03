@@ -42,14 +42,20 @@ Definition: Whether the clean output still preserves the user's intended meaning
 
 Scoring: 0 intent lost, 1 partially preserved, 2 preserved.
 
-## Instruction Drift Rate
-
-Definition: Percentage of generated instructions that distort the original concept into a different project.
-
-Scoring: count drifted outputs divided by total instruction outputs.
-
 ## Overall Boundary Failure Rate
 
 Definition: Percentage of outputs with at least one major frame or dialogue boundary failure.
 
 Scoring: count failed outputs divided by total outputs.
+
+## Secondary Diagnostic Metrics
+
+Instruction Drift Guard is a secondary guardrail/check, not one of the two primary communication boundary failures.
+
+### Instruction Drift Rate
+
+Instruction Drift Rate is used to evaluate whether the proposed skill is preserved correctly when transformed into prompts, tasks, docs, or reusable instructions. It is not treated as a primary communication boundary failure metric.
+
+Definition: Percentage of generated instructions that distort the original concept into a different project.
+
+Scoring: count drifted outputs divided by total instruction outputs.
